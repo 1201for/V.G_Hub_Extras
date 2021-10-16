@@ -1,3 +1,10 @@
+LP = game.Players.LocalPlayer
+local function CheckRig()
+  if LP .Character and LP .Character:FindFirstChild('Humanoid') then 
+    return (LP.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 and 'R15' or 'R6') 
+  end
+end
+if CheckRig() == 'R15' then
 local OldNameCall = nil
 OldNameCall = hookmetamethod(game, "__namecall", function(self,...)
     local Args = {...}
@@ -10,3 +17,19 @@ OldNameCall = hookmetamethod(game, "__namecall", function(self,...)
     end
     return OldNameCall(self, ...)
 end)
+end
+
+if CheckRig() == 'R6' then
+local OldNameCall = nil
+OldNameCall = hookmetamethod(game, "__namecall", function(self,...)
+    local Args = {...}
+    if getnamecallmethod() == "FindPartOnRayWithIgnoreList" and not checkcaller() and  getgenv().SilentAim  then
+        local GivemeHead = ClosestPlayerToCurser()
+        if GivemeHead and GivemeHead.Character and GivemeHead.Character.FindFirstChild(GivemeHead.Character, "Torso") then
+            Args[1] = Ray.new(workspace.CurrentCamera.CFrame.Position, (GivemeHead.Character.Torso.Position - workspace.CurrentCamera.CFrame.Position).Unit * 1000)
+            return OldNameCall(self, unpack(Args))
+        end
+    end
+    return OldNameCall(self, ...)
+end)
+end
