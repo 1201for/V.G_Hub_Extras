@@ -1,0 +1,8 @@
+local OldNameCall = nil
+OldNameCall = hookmetamethod(game, "__namecall", function(self, ...)
+  local Args = {...}
+    if getnamecallmethod() == "FindPartOnRayWithIgnoreList" and getgenv().WALLBANG then
+       table.insert(Args[2], workspace.Map)
+    end
+    return OldNameCall(self, ...)
+end)
