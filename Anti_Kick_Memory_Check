@@ -1,0 +1,14 @@
+hookfunction((gcinfo or collectgarbage), function(...)
+    if getgenv().Memory then
+     return math.random(200,350) -- memory check
+   end 
+end)
+local OldNameCall = nil
+OldNameCall = hookmetamethod(game, "__namecall", function(...)
+    local Args = {...}
+    local Self = Args[1]
+    if getnamecallmethod() == "Kick" and  getgenv().Kick then
+            return nil
+    end
+    return OldNameCall(...)
+end)
