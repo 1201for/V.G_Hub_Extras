@@ -1,6 +1,6 @@
 LP = game.Players.LocalPlayer
 local function CheckRig()
-  if LP.Character and LP .Character:FindFirstChild('Humanoid') then 
+  if LP.Character and LP.Character:FindFirstChild('Humanoid') then 
     return (LP.Character.Humanoid.RigType == Enum.HumanoidRigType.R15 and 'R15' or 'R6') 
   end
 end
