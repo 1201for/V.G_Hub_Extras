@@ -1,7 +1,7 @@
 local OldNameCall
-OldNameCall = hookmetamethod(game, "__newindex", function(A, B, C)
+OldNameCall = hookmetamethod(game, "__newindex", function(A, B, ...)
     if not checkcaller()  and (B == "WalkSpeed" or B == "JumpPower") then
         return
     end
-    return OldNameCall(A, B, C)
+    return OldNameCall(A, B, ...)
 end)
