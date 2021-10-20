@@ -1,4 +1,4 @@
-
+local x = 1
 function maths(X)
  return math.acos(math.cos(X * math.pi)) / math.pi-- credits to snake587 for this function hope he dosen't mind if i use it credits are all ready in place for it
 end
