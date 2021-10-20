@@ -16,11 +16,10 @@ end
 end)
 
 while getgenv().RainBowMap and wait(1) do
-
 if game:GetService("Workspace"):FindFirstChild('Map') then
-for i,ranbow in pairs(game:GetService("Workspace").Map:GetChildren()) do -- getting map
-if ranbow.ClassName == 'MeshPart' or ranbow.ClassName == "Part" or ranbow.ClassName == "WedgePart" then 
-ranbow.Color = Color3.fromHSV(maths(x),1,1)-- changes Color
+for i,v in pairs(game:GetService("Workspace").Map:GetDescendants()) do -- getting map
+if v.ClassName == 'MeshPart' then 
+v.Color = Color3.fromHSV(maths(x),1,1)-- changes Color
 x = x + .0001 -- counting
 end
 end
