@@ -6,7 +6,7 @@ game:GetService("RunService").RenderStepped:Connect(function()
 if getgenv().RainBowGun then
 if game.Workspace.Camera:FindFirstChild('Arms') then
 for i,v in pairs(game.Workspace.Camera.Arms:GetChildren()) do -- gets thing
-if v.ClassName == 'MeshPart' or v.ClassName == "Part" or v.ClassName == "WedgePart" then 
+if v.ClassName == 'MeshPart' then 
 v.Color = Color3.fromHSV(maths(x),1,1)-- changes Color
 x = x + .0001
 end
