@@ -1,3 +1,7 @@
+
+function maths(X)
+ return math.acos(math.cos(X * math.pi)) / math.pi-- credits to snake587 for this function hope he dosen't mind if i use it
+end
 game:GetService("RunService").RenderStepped:Connect(function()
 if getgenv().RainBowGun then
 if game.Workspace.Camera:FindFirstChild('Arms') then
