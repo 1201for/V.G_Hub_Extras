@@ -33,3 +33,18 @@ OldNameCall = hookmetamethod(game, "__namecall", function(self,...)
     return OldNameCall(self, ...)
 end)
 end
+if game.PlaceId == 734159876 then
+    
+local OldNameCall = nil
+OldNameCall = hookmetamethod(game, "__namecall", function(self,...)
+    local Args = {...}
+    if getnamecallmethod() == "FindPartOnRayWithIgnoreList" and not checkcaller() and  getgenv().SilentAim  then
+        local GivemeHead = GetClosestFromCursor()
+        if GivemeHead and GivemeHead.Body then
+            Args[1] = Ray.new(workspace.CurrentCamera.CFrame.Position, (GivemeHead.Body.Position - workspace.CurrentCamera.CFrame.Position).Unit * 1000)
+            return OldNameCall(self, unpack(Args))
+        end
+    end
+    return OldNameCall(self, ...)
+end)
+end
