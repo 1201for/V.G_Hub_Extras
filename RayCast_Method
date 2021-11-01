@@ -48,3 +48,17 @@ OldNameCall = hookmetamethod(game, "__namecall", function(self,...)
     return OldNameCall(self, ...)
 end)
 end
+if game.PlaceId == 3233893879  then
+local OldNameCall = nil
+OldNameCall = hookmetamethod(game, "__namecall", function(self,...)
+    local Args = {...}
+    if tostring(self) == "Projectiles" and getnamecallmethod() == "FireServer" and getClosestPlayerToCursor()  and getgenv().SilentAim then
+    pcall(function()        
+        Args[3] = getClosestPlayerToCursor().Hitbox.Chest
+        Args[4] = getClosestPlayerToCursor().Hitbox.Chest.Position
+        end)
+        return self.FireServer(self, unpack(Args))
+    end
+    return OldNameCall(self, ...)
+end)
+end
