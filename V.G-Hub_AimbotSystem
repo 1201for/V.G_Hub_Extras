@@ -1,0 +1,86 @@
+getgenv().Circle = Drawing.new("Circle")
+getgenv().Circle.Color =  Color3.fromRGB(22, 13, 56)
+getgenv().Circle.Thickness = 1
+getgenv().Circle.Radius = 250
+getgenv().Circle.Visible = false
+getgenv().Circle.NumSides = 1000
+getgenv().Circle.Filled = false
+getgenv().Circle.Transparency = 1
+
+game:GetService("RunService").RenderStepped:Connect(function()
+    local Mouse = game:GetService("UserInputService"):GetMouseLocation()
+    getgenv().Circle.Position = Vector2.new(Mouse.X, Mouse.Y)
+end)
+getgenv().AimBot = {
+FreeForAll= false,
+WallCheck = false,
+Enabled = false,
+FOV = 250,
+}
+
+
+
+local Shoot = false
+
+
+
+
+function FreeForAll(v)
+    if getgenv().AimBot.FreeForAll == false then
+        if game.Players.LocalPlayer.Team == v.Team then return false
+        else return true end
+    else return true end
+end
+
+function NotObstructing(i, v)
+    if getgenv().AimBot.WallCheck then
+        c = workspace.CurrentCamera.CFrame.p
+        a = Ray.new(c, i - c)
+        f = workspace:FindPartOnRayWithIgnoreList(a, v)
+        return f == nil
+    else
+        return true
+    end
+end
+game:GetService("UserInputService").InputBegan:Connect(function(v)
+    if v.UserInputType == Enum.UserInputType.MouseButton2 then
+        Shoot = true
+    end
+end)
+
+game:GetService("UserInputService").InputEnded:Connect(function(v)
+    if v.UserInputType == Enum.UserInputType.MouseButton2 then
+        Shoot = false
+    end
+end)
+
+
+function GetClosestToCuror()
+    Closest = math.huge
+    Target = nil
+    for _,v in pairs(game:GetService("Players"):GetPlayers()) do
+        if FreeForAll(v) then
+            if v ~= game.Players.LocalPlayer and v.Character and v.Character:FindFirstChild("HumanoidRootPart") and v.Character:FindFirstChild("Humanoid") and v.Character.Humanoid.Health ~= 0  then
+                Point,OnScreen = workspace.CurrentCamera:WorldToViewportPoint(v.Character.HumanoidRootPart.Position)
+                if OnScreen and NotObstructing(v.Character.HumanoidRootPart.Position,{game.Players.LocalPlayer.Character,v.Character}) then
+                    Distance = (Vector2.new(Point.X,Point.Y) -  Vector2.new(game.Players.LocalPlayer:GetMouse().X, game.Players.LocalPlayer:GetMouse().Y)).magnitude
+                      if Distance <= getgenv().AimBot.FOV then
+                          Closest = Distance
+                       Target = v
+                     end
+                  end
+               end
+            end
+         end
+    return Target
+end 
+
+game:GetService('RunService').Stepped:connect(function()
+pcall(function()
+    if getgenv().AimBot.Enabled == false or Shoot == false then return end
+    ClosestPlayer = GetClosestToCuror()
+    if ClosestPlayer then
+     workspace.CurrentCamera.CFrame = CFrame.new(workspace.CurrentCamera.CFrame.p,ClosestPlayer.Character.HumanoidRootPart.CFrame.p)
+    end 
+end)
+end)
