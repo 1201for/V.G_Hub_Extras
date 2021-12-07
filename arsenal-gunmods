@@ -1,24 +1,24 @@
 for i, v in pairs(game:GetService("ReplicatedStorage").Weapons:GetDescendants()) do
-    if v.Name == "MaxSpread" or v.Name == "Spread" or v.Name == "RecoilControl" and getgenv().Recoil then
+    if v.Name == "MaxSpread" or v.Name == "Spread" or v.Name == "RecoilControl"  then
             v.Value = 0
-        else
+        elseif not getgenv().Recoil then
             v.Value = 1
     end
 end
 
 for _, v in pairs(game.ReplicatedStorage.Weapons:GetDescendants()) do
-    if v.Name == "FireRate"  and getgenv().FireRate then
+    if v.Name == "FireRate"   then
             v.Value = 0.02
-        else
+        elseif not getgenv().FireRate then
             v.Value = 0.4
     end
 end
 
 
 for _, v in pairs(game.ReplicatedStorage.Weapons:GetDescendants()) do
-    if v.Name == "Auto" and  getgenv().Automatic then
+    if v.Name == "Auto"  then
             v.Value = true
-        else
+        elseif not getgenv().Automatic then
             v.Value = false
     end
 end
