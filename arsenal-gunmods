@@ -1,29 +1,17 @@
 for i, v in pairs(game:GetService("ReplicatedStorage").Weapons:GetDescendants()) do
-    for i, v in pairs(getconnections(v.Changed)) do
-        v:Disable()
+    if getgenv().Recoil and  v.Name == "MaxSpread" or v.Name == "Spread" or v.Name == "RecoilControl"  then
+            v.Value = 0
+        elseif not getgenv().Recoil and  v.Name == "MaxSpread" or v.Name == "Spread" or v.Name == "RecoilControl" then
+            v.Value = 1
+        end
+    if getgenv().FireRate and  v.Name == "FireRate"   then
+            v.Value = 0.02
+        elseif not getgenv().Automatic and  v.Name == "Auto" then
+            v.Value = 0.4
     end
-end
-
-for i, v in pairs(game:GetService("ReplicatedStorage").Weapons:GetDescendants()) do
-    if getgenv().Recoil and v.Name == "MaxSpread" or v.Name == "Spread" or v.Name == "RecoilControl" then
-        v.Value = 0
-    elseif getgenv().Recoil == false then
-        v.Value = 1
-    end
-end
-
-for _, v in pairs(game.ReplicatedStorage.Weapons:GetDescendants()) do
-    if getgenv().FireRate and v.Name == "FireRate" then
-        v.Value = 0.02
-    elseif getgenv().FireRate == false then
-        v.Value = 0.4
-    end
-end
-
-for _, v in pairs(game.ReplicatedStorage.Weapons:GetDescendants()) do
-    if getgenv().Automatic and v.Name == "Auto" then
-        v.Value = true
-    elseif getgenv().Automatic == false then
-        v.Value = false
+       if getgenv().Automatic and  v.Name == "Auto"  then
+            v.Value = true
+        elseif not getgenv().Automatic and  v.Name == "Auto" then
+            v.Value = false
     end
 end
