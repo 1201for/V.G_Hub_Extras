@@ -1,21 +1,29 @@
-for i, v in pairs(game:GetService("ReplicatedStorage").Weapons:GetDescendants()) do
-    pcall(
-        function()
-            if getgenv().Recoil and v.Name == "MaxSpread" or v.Name == "Spread" or v.Name == "RecoilControl" then
-                v.Value = 0
-            elseif not getgenv().Recoil then
-                v.Value = 1
-            end
-            if getgenv().FireRate then
-                v.Value = 0.02
-            elseif not getgenv().FireRate then
-                v.Value = 0.4
-            end
-            if getgenv().Automatic then
-                v.Value = true
-            elseif not getgenv().Automatic then
-                v.Value = false
-            end
+for _, v in pairs(game.ReplicatedStorage.Weapons:GetDescendants()) do
+    if v.Name == "Auto" then
+        if getgenv().Automatic then
+            v.Value = true -- always auto
+        else
+            v.Value = false
         end
-    )
+    end
+end
+
+for _, v in pairs(game.ReplicatedStorage.Weapons:GetDescendants()) do
+    if v.Name == "FireRate" then
+        if getgenv().FireRate then
+            v.Value = 0.02 -- Fast Firerate
+        else
+            v.Value = 0.8
+        end
+    end
+end
+
+for i, v in pairs(game:GetService("ReplicatedStorage").Weapons:GetDescendants()) do
+    if v.Name == "MaxSpread" or v.Name == "Spread" or v.Name == "RecoilControl" then
+        if getgenv().Recoil then
+            v.Value = 0 -- no spread or recoil
+        else
+            v.Value = 1
+        end
+    end
 end
