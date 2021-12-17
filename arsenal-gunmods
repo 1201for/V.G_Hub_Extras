@@ -2,13 +2,13 @@ for i, v in pairs(game:GetService("ReplicatedStorage").Weapons:GetDescendants())
     pcall(
         function()
             if getgenv().Recoil and v.Name == "MaxSpread" or v.Name == "Spread" or v.Name == "RecoilControl" then
-                v.Value = 0.02
-            elseif not getgenv().Recoil and v.Name == "MaxSpread" or v.Name == "Spread" or v.Name == "RecoilControl" then
+                v.Value = 0
+            elseif not getgenv().Recoil then
                 v.Value = 1
             end
             if getgenv().FireRate then
                 v.Value = 0.02
-            elseif not getgenv().Automatic then
+            elseif not getgenv().FireRate then
                 v.Value = 0.4
             end
             if getgenv().Automatic then
