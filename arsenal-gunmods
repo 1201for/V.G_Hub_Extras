@@ -1,4 +1,4 @@
-while wait() do
+while wait(1) do
 for _, v in pairs(game.ReplicatedStorage.Weapons:GetDescendants()) do
     if v.Name == "Auto" then
         if getgenv().Automatic then
