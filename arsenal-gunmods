@@ -32,4 +32,3 @@ for i, v in pairs(game:GetService("ReplicatedStorage").Weapons:GetDescendants())
         end
     end
 end
-end
