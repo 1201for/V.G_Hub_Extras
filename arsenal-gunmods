@@ -1,4 +1,8 @@
-while wait(1) do
+for i, v in pairs(game:GetService("ReplicatedStorage").Weapons:GetDescendants()) do
+for i,v in next, getconnections(v.Changed) do
+v:Disable()
+end
+end
 for _, v in pairs(game.ReplicatedStorage.Weapons:GetDescendants()) do
     if v.Name == "Auto" then
         if getgenv().Automatic then
