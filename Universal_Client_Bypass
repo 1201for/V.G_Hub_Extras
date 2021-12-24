@@ -1,5 +1,7 @@
 repeat wait() until game:IsLoaded() wait()
-
+game:GetService("Players").LocalPlayer.Idled:connect(function()
+game:GetService("VirtualUser"):ClickButton2(Vector2.new())
+end)
 if hookmetamethod then
 local OldNameCall = nil
 OldNameCall = hookmetamethod(game, "__namecall", function(...)
@@ -24,9 +26,6 @@ for _,v in next, getconnections(game:GetService("LogService").MessageOut) do
 end
 for _,v in next, getconnections(game:GetService("ScriptContext").Error) do
     v:Disable()
-end
-for i,v in pairs(getconnections(game.Players.LocalPlayer.Idled)) do
-v:Disable()
 end
 end
 if hookfunction and gcinfo or collectgarbage then
