@@ -34,3 +34,7 @@ hookfunction((gcinfo or collectgarbage), function(...)
      return math.random(200,350) 
 end)
 end 
+if not getconnections then
+game:GetService("Players").LocalPlayer.Idled:connect(function()
+game:GetService("VirtualUser"):ClickButton2(Vector2.new())
+end) print("poopy exploit") end 
