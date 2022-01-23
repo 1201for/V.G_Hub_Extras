@@ -2,13 +2,13 @@ repeat wait() until game:IsLoaded() wait()
 
 if hookmetamethod then
 local OldNameCall = nil
-OldNameCall = hookmetamethod(game, "__namecall", function(...)
+OldNameCall = hookmetamethod(game, "__namecall", function(self, ...)
     local Args = {...}
     local Self = Args[1]
-    if getnamecallmethod() == "Kick" and game.Players.LocalPlayer  then
+    if getnamecallmethod() == "Kick" and self.Name == game.Players.LocalPlayer  then
             return nil
     end
-    return OldNameCall(...)
+    return OldNameCall(self, ...)
 end)
 end 
 if setfflag then
