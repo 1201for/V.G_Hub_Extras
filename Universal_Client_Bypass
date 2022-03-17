@@ -1,5 +1,5 @@
 repeat wait() until game:IsLoaded() wait()
-
+game:GetService("ScriptContext"):SetTimeout(3)
 if hookmetamethod then
 local OldNameCall = nil
 OldNameCall = hookmetamethod(game, "__namecall", function(self, ...)
