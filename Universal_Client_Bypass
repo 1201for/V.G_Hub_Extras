@@ -58,7 +58,7 @@ OldNameCall = hookmetamethod(game, "__namecall", function(...)
     return OldNameCall(...)
 end)
 for i,v in next, game:GetService("ReplicatedFirst"):GetChildren() do
-    if v.Name:find("B.A") then
+    if v.Name:find("B.A") or v.Name:find("load") then
         v.Disabled = true
     end
 end
