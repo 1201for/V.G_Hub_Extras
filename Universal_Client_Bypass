@@ -57,9 +57,6 @@ OldNameCall = hookmetamethod(game, "__namecall", function(...)
     end
     return OldNameCall(...)
 end)
-for i,v in next, game:GetService("ReplicatedFirst"):GetChildren() do
-    if v.Name:find("B.A") or v.Name:find("load") then
-        v.Disabled = true
-    end
-end
+hookfunction(game.ContentProvider.PreloadAsync,function() return wait(9e9)  end)
+game.ScriptContext:SetTimeout(0.05)
 end end)
