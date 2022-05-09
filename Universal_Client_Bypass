@@ -58,4 +58,7 @@ OldNameCall = hookmetamethod(game, "__namecall", function(...)
 end)
 hookfunction(game.ContentProvider.PreloadAsync,function() return wait(9e9)  end)
 game.ScriptContext:SetTimeout(0.05)
+hookfunction(xpcall,function()
+    return
+end)
 end end)
