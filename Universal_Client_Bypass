@@ -31,8 +31,7 @@ end
 for _,v in next, getconnections(game:GetService("Players").LocalPlayer.Idled) do
     v:Disable()
 end
-hookfunction(game.ContentProvider.PreloadAsync,function() return end)
-hookfunction(xpcall,function()  return end)
+
 end
 if hookfunction and gcinfo or collectgarbage then
 hookfunction((gcinfo or collectgarbage), function(...)
