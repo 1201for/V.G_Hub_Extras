@@ -38,9 +38,6 @@ if hookfunction and gcinfo or collectgarbage then
 hookfunction((gcinfo or collectgarbage), function(...)
      return math.random(200,350) 
 end)
-hookfunction(game.ContentProvider.PreloadAsync,function() return wait(9e9) end)
-
-hookfunction(xpcall,function() return end)
 end 
 if not getconnections then
 game:GetService("Players").LocalPlayer.Idled:connect(function()
@@ -61,4 +58,7 @@ OldNameCall = hookmetamethod(game, "__namecall", function(...)
     end
     return OldNameCall(...)
 end)
+hookfunction(game.ContentProvider.PreloadAsync,function() return wait(9e9) end)
+
+hookfunction(xpcall,function() return end)
 end end)
