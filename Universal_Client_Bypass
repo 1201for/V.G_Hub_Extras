@@ -12,7 +12,7 @@ if hookmetamethod then
         function(self, ...)
             local Args = {...}
             local Self = Args[1]
-            if getnamecallmethod() == "Kick" and self.Name == game.Players.LocalPlayer then
+            if getnamecallmethod() == "Kick" and self.Name == game.Players.LocalPlayer.Name then
                 return nil
             end
             if getnamecallmethod() == "Kick" or getnamecallmethod() == "kick" then
