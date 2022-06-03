@@ -11,12 +11,11 @@ if hookmetamethod then
         "__namecall",
         function(self, ...)
             local Args = {...}
-            local Self = Args[1]
-            if getnamecallmethod() == "Kick" and self.Name == game.Players.LocalPlayer.Name then
-                return nil
+            if getnamecallmethod() == "Kick" or getnamecallmethod() == "kick" and self == game.Players.LocalPlayer then
+                return
             end
-            if getnamecallmethod() == "Kick" or getnamecallmethod() == "kick" then
-                return nil
+            if getnamecallmethod() == "GetRealPhysicsFPS" then
+                return
             end
             return OldNameCall(self, ...)
         end
@@ -47,6 +46,14 @@ if hookfunction and gcinfo or collectgarbage then
             return math.random(200, 350)
         end
     )
+    hookfunction(
+        game.Players.LocalPlayer.Kick,
+        newcclosure(
+            function()
+                return nil
+            end
+        )
+    )
 end
 if not getconnections then
     game:GetService("Players").LocalPlayer.Idled:connect(
@@ -56,52 +63,3 @@ if not getconnections then
     )
     print("poopy exploit")
 end
-
-pcall(
-    function()
-        if
-            game.PlaceId == 5122568874 or game.PlaceId == 5122568155 or game.PlaceId == 5122567177 or
-                game.PlaceId == 379614936 or
-                game.PlaceId == 5827139096 or
-                game.PlaceId == 2664771962 or
-                game.PlaceId == 866472074 or
-                gamer.PlaceId == 5006801542 or
-                game.PlaceId == 2664773504 or
-                game.PlaceId == 860428890
-         then
-            local OldNameCall
-            OldNameCall =
-                hookmetamethod(
-                game,
-                "__namecall",
-                function(...)
-                    local Args = {...}
-                    local Self = Args[1]
-                    if
-                        getnamecallmethod() == "FireServer" and
-                            (tostring(Self) == "clientkick" or tostring(Self) == "ginger" or tostring(Self) == "egg")
-                     then
-                        return wait(9e9)
-                    end
-                    if string.lower(getnamecallmethod()) == "kick" and Self == game.Players.LocalPlayer then
-                        return wait(9e9)
-                    end
-                    return OldNameCall(...)
-                end
-            )
-            hookfunction(
-                game.ContentProvider.PreloadAsync,
-                function()
-                    return wait(9e9)
-                end
-            )
-
-            hookfunction(
-                xpcall,
-                function()
-                    return
-                end
-            )
-        end
-    end
-)
