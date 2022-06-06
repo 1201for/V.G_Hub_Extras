@@ -4,7 +4,7 @@ until game:IsLoaded()
 wait()
 
 game:GetService("ScriptContext"):SetTimeout(0.5)
-if hookmetamethod and hookfunction then
+if hookmetamethod and hookfunction then -- e621
     local OldNameCall
     OldNameCall =
         hookfunction(
