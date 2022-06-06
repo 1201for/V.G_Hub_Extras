@@ -2,22 +2,45 @@ repeat
     wait()
 until game:IsLoaded()
 wait()
+
 game:GetService("ScriptContext"):SetTimeout(0.5)
-if hookmetamethod then
-    local OldNameCall = nil
+if hookmetamethod and hookfunction then
+    local OldNameCall
+    OldNameCall =
+        hookfunction(
+        game.Players.LocalPlayer.Kick,
+        newcclosure(
+            function(...)
+                local self, key = {...}
+                if typeof(self) ~= "Instance" then
+                    return OldNameCall(...)
+                 --prevent newproxies
+                end
+                if self == game:GetService("Players").LocalPlayer then
+                    return
+                end
+                return OldNameCall(...)
+            end
+        )
+    )
+    local OldNameCall
     OldNameCall =
         hookmetamethod(
         game,
         "__namecall",
-        function(self, ...)
-            local Args = {...}
-            if getnamecallmethod() == "Kick" or getnamecallmethod() == "kick" and self == game.Players.LocalPlayer then
+        function(...)
+            local self, key = {...}
+            if typeof(self) ~= "Instance" then
+                return OldNameCall(...)
+             --prevent newproxies
+            end
+            if
+                self == game:GetService("Players").LocalPlayer and
+                    (getnamecallmethod() == "Kick" or getnamecallmethod() == "kick")
+             then
                 return
             end
-            if getnamecallmethod() == "GetRealPhysicsFPS" then
-                return
-            end
-            return OldNameCall(self, ...)
+            return OldNameCall(...)
         end
     )
 end
@@ -46,14 +69,6 @@ if hookfunction and gcinfo or collectgarbage then
             return math.random(200, 350)
         end
     )
-    hookfunction(
-        game.Players.LocalPlayer.Kick,
-        newcclosure(
-            function()
-                return nil
-            end
-        )
-    )
 end
 if not getconnections then
     game:GetService("Players").LocalPlayer.Idled:connect(
@@ -63,3 +78,4 @@ if not getconnections then
     )
     print("poopy exploit")
 end
+
