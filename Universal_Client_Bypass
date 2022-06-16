@@ -14,11 +14,12 @@ if hookmetamethod and hookfunction then -- e621
                 local self, key = {...}
                 if typeof(self) ~= "Instance" then
                     return OldNameCall(...)
-                 --prevent newproxies
+                --prevent newproxies
                 end
                 if self == game:GetService("Players").LocalPlayer then
                     return
                 end
+
                 return OldNameCall(...)
             end
         )
@@ -32,13 +33,16 @@ if hookmetamethod and hookfunction then -- e621
             local self, key = {...}
             if typeof(self) ~= "Instance" then
                 return OldNameCall(...)
-             --prevent newproxies
+            --prevent newproxies
             end
             if
                 self == game:GetService("Players").LocalPlayer and
                     (getnamecallmethod() == "Kick" or getnamecallmethod() == "kick")
              then
                 return
+            end
+            if getnamecallmethod() == "Kick" or getnamecallmethod() == "kick" then
+                return nil
             end
             return OldNameCall(...)
         end
