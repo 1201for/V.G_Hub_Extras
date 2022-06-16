@@ -41,10 +41,27 @@ if hookmetamethod and hookfunction then -- e621
              then
                 return
             end
+
+            return OldNameCall(...)
+        end
+    )
+end
+if hookmetamethod then
+    local OldNameCall = nil
+    OldNameCall =
+        hookmetamethod(
+        game,
+        "__namecall",
+        function(self, ...)
+            local Args = {...}
+            local Self = Args[1]
+            if getnamecallmethod() == "Kick" and self.Name == game.Players.LocalPlayer then
+                return nil
+            end
             if getnamecallmethod() == "Kick" or getnamecallmethod() == "kick" then
                 return nil
             end
-            return OldNameCall(...)
+            return OldNameCall(self, ...)
         end
     )
 end
