@@ -1,70 +1,72 @@
 repeat
-    wait()
+    task.wait()
 until game:IsLoaded()
-wait()
 
-game:GetService("ScriptContext"):SetTimeout(0.5)
-if hookmetamethod and hookfunction then -- e621
-    local OldNameCall
-    OldNameCall =
-        hookfunction(
-        game.Players.LocalPlayer.Kick,
-        newcclosure(
-            function(...)
-                local self, key = {...}
-                if typeof(self) ~= "Instance" then
-                    return OldNameCall(...)
-                --prevent newproxies
-                end
-                if self == game:GetService("Players").LocalPlayer then
-                    return
-                end
+local Disables = {
+    game:GetService("Players").LocalPlayer.Idled,
+    game:GetService("ScriptContext").Error,
+    game:GetService("LogService").MessageOut
+}
 
-                return OldNameCall(...)
-            end
-        )
-    )
-    local OldNameCall
-    OldNameCall =
-        hookmetamethod(
-        game,
-        "__namecall",
-        function(...)
-            local self, key = {...}
-            if typeof(self) ~= "Instance" then
-                return OldNameCall(...)
-            --prevent newproxies
-            end
-            if
-                self == game:GetService("Players").LocalPlayer and
-                    (getnamecallmethod() == "Kick" or getnamecallmethod() == "kick")
-             then
-                return
-            end
+local Nos = {
+    "PreloadAsync",
+    "Kick",
+    "kick",
+    "xpcall",
+    "gcinfo",
+    "collectgarbage",
+}
 
-            return OldNameCall(...)
-        end
-    )
+local Yes = {
+    game:GetService("Players").LocalPlayer,
+    game:GetService("CoreGui"),
+}
+
+for i, v in pairs(Disables) do
+    for i, v in pairs(getconnections(v)) do
+        v:Disable()
+    end
 end
-if hookmetamethod then
-    local OldNameCall = nil
-    OldNameCall =
-        hookmetamethod(
-        game,
-        "__namecall",
+
+local OldNameCall = nil
+OldNameCall =
+    hookmetamethod(
+    game,
+    "__namecall",
+    newcclosure(
         function(self, ...)
-            local Args = {...}
-            local Self = Args[1]
-            if getnamecallmethod() == "Kick" and self.Name == game.Players.LocalPlayer then
-                return nil
+            local A = {...}
+
+            if table.find(Nos, getnamecallmethod()) and table.find(Yes, self) then
+                return nil or wait(math.huge)
             end
-            if getnamecallmethod() == "Kick" or getnamecallmethod() == "kick" then
-                return nil
+            if typeof(A) ~= "Instance" then
+                return OldNameCall(self, ...)
             end
-            return OldNameCall(self, ...)
+            return OldNameCall(unpack(A), self, ...)
         end
     )
-end
+)
+
+local OldNameCall = nil
+OldNameCall =
+    hookfunction(
+    game:GetService("Players").LocalPlayer.Kick,
+    newcclosure(
+        function(self, ...)
+            local A = {...}
+            if self == game:GetService("Players").LocalPlayer then
+                return nil or wait(math.huge)
+            end
+            if typeof(A) ~= "Instance" then
+                return OldNameCall(self, ...)
+            end
+            
+            return OldNameCall(unpack(A), self, ...)
+        end
+    )
+)
+
 if setfflag then
     setfflag("HumanoidParallelRemoveNoPhysics", "False")
     setfflag("HumanoidParallelRemoveNoPhysicsNoSimulate2", "False")
@@ -72,31 +74,5 @@ end
 if setfpscap then
     setfpscap(100)
 end
-if getconnections then
-    for _, v in next, getconnections(game:GetService("LogService").MessageOut) do
-        v:Disable()
-    end
-    for _, v in next, getconnections(game:GetService("ScriptContext").Error) do
-        v:Disable()
-    end
-    for _, v in next, getconnections(game:GetService("Players").LocalPlayer.Idled) do
-        v:Disable()
-    end
-end
-if hookfunction and gcinfo or collectgarbage then
-    hookfunction(
-        (gcinfo or collectgarbage),
-        function(...)
-            return math.random(200, 350)
-        end
-    )
-end
-if not getconnections then
-    game:GetService("Players").LocalPlayer.Idled:connect(
-        function()
-            game:GetService("VirtualUser"):ClickButton2(Vector2.new())
-        end
-    )
-    print("poopy exploit")
-end
 
+game:GetService("ScriptContext"):SetTimeout(0.5)
