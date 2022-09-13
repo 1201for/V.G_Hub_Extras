@@ -41,6 +41,9 @@ OldNameCall =
             if table.find(Nos, getnamecallmethod()) and table.find(Yes, self)   then
                 return nil or wait(math.huge)
             end
+            if getnamecallmethod()=="FindService" and self.Name == "VirtualUser" and self.Name == "VirtualInputManager" then
+                return 
+            end
             if typeof(A) ~= "Instance" then
                 return OldNameCall(self, ...)
             end
@@ -58,11 +61,3 @@ if setfpscap then
 end
 
 game:GetService("ScriptContext"):SetTimeout(0.5)
-
-if not getconnections then
-   game:GetService("Players").LocalPlayer.Idled:connect(
-       function()
-           game:GetService("VirtualUser"):ClickButton2(Vector2.new())
-       end
-   )
-end
