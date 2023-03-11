@@ -59,11 +59,6 @@ end
 
 ScriptContext:SetTimeout(0.5)
 
-Idled:Connect(function()
-    VirtualUser:ClickButton2(Vector2.new(math.random(1,100),math.random(1,100)))
-end)
-
-
 G.GetFunction = function(A)
     for i,v in pairs(getgc()) do
         if type(v) == "function" and getinfo(v).name == tostring(A) then
