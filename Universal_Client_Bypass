@@ -1,14 +1,24 @@
 repeat
     task.wait()
 until game:IsLoaded()
-loadstring(game:HttpGet('https://raw.githubusercontent.com/1201for/V.G-Hub/main/ok'))()
+repeat task.wait() until game:IsLoaded()
+local G = getgenv and getgenv() or _G or shared
 
-local Disables = {
-    game:GetService("Players").LocalPlayer.Idled,
-    game:GetService("ScriptContext").Error,
-    game:GetService("LogService").MessageOut
-}
-
+for i,v in pairs(game:GetChildren()) do
+    G[v.ClassName] = v 
+end 
+G.Player = Players.LocalPlayer
+G.wait = task.wait 
+G.spawn = task.spawn
+G.Heartbeat = RunService.Heartbeat
+G.Stepped = RunService.Stepped
+G.RenderStepped = RunService.RenderStepped
+G.Error = ScriptContext.Error
+G.MessageOut = LogService.MessageOut
+G.Kick = Player.Kick
+G.Idled = Player.Idled
+G.GC = GetChildren
+G.GD = GetDescendants
 local Nos = {
     "PreloadAsync",
     "Kick",
@@ -16,42 +26,32 @@ local Nos = {
     "xpcall",
     "gcinfo",
     "collectgarbage",
+    "FindService",
 }
-
-local Yes = {
-    game:GetService("Players").LocalPlayer,
-    game:GetService("CoreGui"),
+local Disables = {
+    Error,
+    MessageOut
 }
-
-for i, v in pairs(Disables) do
-    for i, v in pairs(getconnections(v)) do
-        v:Disable()
-    end
-end
 
 local OldNameCall = nil
-OldNameCall =
-    hookmetamethod(
-    game,
-    "__namecall",
-    newcclosure(
-        function(self, ...)
-            local A = {...}
+OldNameCall = hookmetamethod(game, "__namecall", function(...)
+    local Args = {...}
+    local A, B, C = ...
+    if table.find(Nos, A.Name) then
+        return 
+    end 
+    return OldNameCall(...)
+end)
 
-            if table.find(Nos, getnamecallmethod()) and table.find(Yes, self)   then
-                return nil or wait(math.huge)
-            end
-            if getnamecallmethod()=="FindService" and self.Name == "VirtualUser" and self.Name == "VirtualInputManager" then
-                return 
-            end
-            if typeof(A) ~= "Instance" then
-                return OldNameCall(self, ...)
-            end
-            return OldNameCall(unpack(A), self, ...)
-        end
-    )
-)
-
+for i,v in pairs(Disables) do 
+    for i,v in pairs(getconnections(v)) do
+        if v.Disable then
+            v:Disable()
+        elseif v.Disconnect then
+            v:Disconnect()
+        end 
+    end 
+end
 if setfflag then
     setfflag("HumanoidParallelRemoveNoPhysics", "False")
     setfflag("HumanoidParallelRemoveNoPhysicsNoSimulate2", "False")
@@ -60,4 +60,8 @@ if setfpscap then
     setfpscap(100)
 end
 
-game:GetService("ScriptContext"):SetTimeout(0.5)
+ScriptContext:SetTimeout(0.5)
+
+Idled:Connect(function()
+    VirtualUser:ClickButton2(Vector2.new(math.random(1,100),math.random(1,100)))
+end)
