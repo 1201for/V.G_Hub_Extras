@@ -38,16 +38,16 @@ if isfile("V.G Hub//" .. Name) and readfile("V.G Hub//" .. Name) then
     Settings = HttpService:JSONDecode(readfile("V.G Hub//" .. Name))
 end 
 
-G.Save = function()
-    pcall(function()
-        writefile("V.G Hub//" .. Name, HttpService:JSONEncode(Settings))
-    end)
-end 
 
 local Nos = {
     "PreloadAsync",
     "Kick",
-    "kick",
+   G.Save = function()
+    pcall(function()
+        writefile("V.G Hub//" .. Name, HttpService:JSONEncode(Settings))
+    end)
+end 
+ "kick",
     "xpcall",
     "gcinfo",
     "collectgarbage",
@@ -119,4 +119,10 @@ G.Tween = function(A, B, C)
         wait(Time)
     end 
     return A, B, C
+end 
+
+G.Save = function()
+    pcall(function()
+        writefile("V.G Hub//" .. Name, HttpService:JSONEncode(Settings))
+    end)
 end 
