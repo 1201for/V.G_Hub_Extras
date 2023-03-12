@@ -1,6 +1,8 @@
 repeat task.wait() until game:IsLoaded()
 local G = getgenv and getgenv() or _G or shared
-
+if game.PlaceId == 185655149 then
+    wait(50)
+end
 for i,v in pairs(game:GetChildren()) do
     G[v.ClassName] = v 
 end 
@@ -16,6 +18,32 @@ G.Kick = Player.Kick
 G.Idled = Player.Idled
 G.GC = GetChildren
 G.GD = GetDescendants
+
+local Name = game.PlaceId .. ".json"
+local Des = {}
+if makefolder and not isfile("V.G Hub") then
+    makefolder("V.G Hub")
+end 
+
+G.Settings = nil
+local Pcall = pcall(function()
+    if isfile("V.G Hub//" .. Name) then
+        readfile("V.G Hub//" .. Name)
+    else 
+        writefile("V.G Hub//" .. Name, HttpService:JSONEncode(Des))
+    end 
+end)
+
+if isfile("V.G Hub//" .. Name) and readfile("V.G Hub//" .. Name) then
+    Settings = HttpService:JSONDecode(readfile("V.G Hub//" .. Name))
+end 
+
+G.Save = function()
+    pcall(function()
+        writefile("V.G Hub//" .. Name, HttpService:JSONEncode(Settings))
+    end)
+end 
+
 local Nos = {
     "PreloadAsync",
     "Kick",
@@ -80,4 +108,15 @@ G.DisableConnection = function(A, B)
         v:Disable()
     end 
     return A, B 
+end
+
+G.Tween = function(A, B, C)
+    if A and B then
+        local Time = (B.Position - A.Position).Magnitude / C 
+        local Info = TweenInfo.new(Time, Enum.EasingStyle.Linear)
+        local Tween = TweenService(A, Info, {CFrame = CFrame.new(B.Position)})
+        Tween:Play()
+        wait(Time)
+    end 
+    return A, B, C
 end 
