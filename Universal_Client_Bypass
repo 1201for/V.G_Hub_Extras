@@ -42,12 +42,7 @@ end
 local Nos = {
     "PreloadAsync",
     "Kick",
-   G.Save = function()
-    pcall(function()
-        writefile("V.G Hub//" .. Name, HttpService:JSONEncode(Settings))
-    end)
-end 
- "kick",
+     "kick",
     "xpcall",
     "gcinfo",
     "collectgarbage",
