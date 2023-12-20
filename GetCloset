@@ -1,16 +1,5 @@
 repeat wait() until game:IsLoaded()
 
-local Yes, No = require(game:GetService("Players").LocalPlayer.PlayerScripts.Modules._Utilities.GUIHandler):ConfirmBox("Are you sure you want to use this script?")
-if Yes then
-	wait(0.1)
-elseif No then 
-	Toggy.Toggled = false
-else 
-	return
-end
-
-
-
 getgenv().Bruh = 0
 if not Text then
 	getgenv().Text = Drawing.new("Text")
