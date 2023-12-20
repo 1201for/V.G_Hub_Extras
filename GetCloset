@@ -1,88 +1,172 @@
-function Teleporter()
-    local PlaceID = game.PlaceId
-    local AllIDs = {}
-    local foundAnything = ""
-    local actualHour = os.date("!*t").hour
-    local Deleted = false
-    function TPReturner()
-        local Site
-        if foundAnything == "" then
-            Site =
-                game.HttpService:JSONDecode(
-                game:HttpGet(
-                    "https://games.roblox.com/v1/games/" .. PlaceID .. "/servers/Public?sortOrder=Asc&limit=100"
-                )
-            )
-        else
-            Site =
-                game.HttpService:JSONDecode(
-                game:HttpGet(
-                    "https://games.roblox.com/v1/games/" ..
-                        PlaceID .. "/servers/Public?sortOrder=Asc&limit=100&cursor=" .. foundAnything
-                )
-            )
-        end
-        local ID = ""
-        if Site.nextPageCursor and Site.nextPageCursor ~= "null" and Site.nextPageCursor ~= nil then
-            foundAnything = Site.nextPageCursor
-        end
-        local num = 0
-        for i, v in pairs(Site.data) do
-            local Possible = true
-            ID = tostring(v.id)
-            if tonumber(v.maxPlayers) > tonumber(v.playing) then
-                for _, Existing in pairs(AllIDs) do
-                    if num ~= 0 then
-                        if ID == tostring(Existing) then
-                            Possible = false
-                        end
-                    else
-                        if tonumber(actualHour) ~= tonumber(Existing) then
-                            local delFile =
-                                pcall(
-                                function()
-                                    delfile("NotSameServers.json")
-                                    AllIDs = {}
-                                    table.insert(AllIDs, actualHour)
-                                end
-                            )
-                        end
-                    end
-                    num = num + 1
-                end
-                if Possible == true then
-                    table.insert(AllIDs, ID)
-                    wait()
-                    pcall(
-                        function()
-                            writefile("NotSameServers.json", game:GetService("HttpService"):JSONEncode(AllIDs))
-                            wait()
-                            game:GetService("TeleportService"):TeleportToPlaceInstance(
-                                PlaceID,
-                                ID,
-                                game.Players.LocalPlayer
-                            )
-                        end
-                    )
-                    wait(4)
-                end
-            end
-        end
-    end
+repeat wait() until game:IsLoaded()
 
-    function Teleport()
-        while wait() do
-            pcall(
-                function()
-                    TPReturner()
-                    if foundAnything ~= "" then
-                        TPReturner()
-                    end
-                end
-            )
-        end
-    end
+local Yes, No = require(game:GetService("Players").LocalPlayer.PlayerScripts.Modules._Utilities.GUIHandler):ConfirmBox("Are you sure you want to use this script?")
+if Yes then
+	wait(0.1)
+elseif No then 
+	Toggy.Toggled = false
+else 
+	return
+end
 
-    -- If you'd like to use a script before server hopping (Like a Automatic Chest collector you can put the Teleport() after it collected everything.
-    Teleport()
+
+
+getgenv().Bruh = 0
+if not Text then
+	getgenv().Text = Drawing.new("Text")
+	Text.Color = Color3.new(0, 1, 1)
+	Text.Font = 1
+	Text.Outline = true
+	Text.OutlineColor = Color3.new(0, 0, 0)
+	Text.Position = Vector2.new(0,0)
+	Text.Size = 25
+	Text.Text = "Test"
+	Text.Visible = true
+end
+
+if Toggy.Toggled then
+	local X,Y= Text.TextBounds.X,Text.Position.Y
+	Text.Position = Vector2.new(Workspace.CurrentCamera.ViewportSize.X  / X , Y + 50)
+else
+	Text.Text = ""
+end
+loadstring(game:HttpGet('https://raw.githubusercontent.com/1201for/V.G-Hub/main/Extras/Anti-Cheat'))()
+UserInputService.WindowFocusReleased:Connect(function()
+	if Toggy.LowRender then
+		RunService:Set3dRenderingEnabled(false)
+		setfpscap(25)
+	end
+end)
+UserInputService.WindowFocused:Connect(function()
+	if Toggy.LowRender then
+		RunService:Set3dRenderingEnabled(true)
+		setfpscap(100)
+	end
+end)
+DisableConnection(Player.Idled)
+DisableConnection(LogService.MessageOut)
+DisableConnection(ScriptContext.Error)
+
+local Locations = Workspace.Environment.Locations
+local JobHandler = Player.PlayerScripts.Modules.JobHandler
+local Stats = ReplicatedStorage.Stats[Player.Name]
+local RandomTime = tostring(math.random(1,3)) .. "h " .. tostring(math.random(1,40)) .. "m"
+print(RandomTime)
+for i, v in next, getgc() do
+	if type(v) == "function" then
+		if getfenv(v).script == ReplicatedStorage.Modules.DataService then
+			local C = getconstants(v)
+			if table.find(C, "RemoteFunction") and table.find(C, "RemoteEvent") then
+				Key = v
+				break
+			end
+		end
+	end
+end
+local Table = {
+	Fire = function(Self, RemoteKey)
+		local Remote = Key(RemoteKey.Type)
+		if Remote then
+			RemoteKey.Type = nil
+			Remote:FireServer(RemoteKey)
+		else
+			return
+		end
+	end,
+	Invoke = function(Self, RemoteKey)
+		local Remote = Key(RemoteKey.Type, true)
+		if Remote then
+			RemoteKey.Type = nil
+			local result = Remote:InvokeServer(RemoteKey)
+			return result
+		else
+			return
+		end
+	end
+}
+local Sorry = function(Part ,Position)
+	if Part then
+		local CFrame = CFrame.new(Part.Position, Position)
+		local Args1, Args2, Args3, Args4, Args5, Args6, Args7, Args8, Args9, Args10, Args11, Args12 = CFrame:GetComponents()
+		return Args4, Args5, Args6, Args7, Args8, Args9, Args10, Args11, Args12
+	end
+end
+
+local function Tween(Model, CFrame, Speed)
+	local Mag = (Model.PrimaryPart.Position - CFrame.Position).magnitude
+	local Tween = TweenService:Create(Model.PrimaryPart, TweenInfo.new(Mag / Speed, Enum.EasingStyle.Linear), {CFrame = CFrame})
+	Tween:Play()
+	Tween.Completed:Wait()
+end
+
+
+local function Pathfind(Model,Position)
+	local S = {WaypointSpacing = 3, Costs = {Grass = 9e9,  Mental = math.huge, Brick = math.huge, Ice = math.huge, SmoothPlastic = 300,  Water = 400}}
+	local path = PathfindingService:CreatePath(S)
+	path:ComputeAsync(Model.PrimaryPart.Position, Position)
+	for i, v in next, path:GetWaypoints() do
+		if path.Status == Enum.PathStatus.Success then
+			Model.PrimaryPart.CFrame = CFrame.lookAt(Model.PrimaryPart.Position, v.Position + Vector3.new(0,2.5,0))
+			Tween(Model, CFrame.new(v.Position.X, v.Position.Y + 2.5, v.Position.Z, Sorry(Model.PrimaryPart, v.Position + Vector3.new(0,2.5,0))), 35)
+		end
+	end
+end
+
+spawn(function()
+	while wait() and Toggy.Toggled do
+			if Player.PlayerGui.MainGUI.Bar.CharMenu.WorkFrame.WorkFrame.TimeLabel.TextLabel.Text:find(RandomTime) then return game:Shutdown() end
+			if Stats.Job.ShiftEarnings.Value >= Toggy.ShiftAmount then return game:Shutdown() end
+	end
+end)
+
+spawn(function()
+	while wait() and Toggy.Toggled do
+		pcall(function()
+			if Bruh < Toggy.BreakTime then
+				if Stats.Job.Value ~= "PizzaPlanetDelivery" then return require(JobHandler):GoToWork("PizzaPlanetDelivery") and require(JobHandler):StartShift("PizzaPlanetDelivery") end
+				if not Player.Character:FindFirstChild("Vehicle_Delivery Moped", true) then
+					if Toggy.Status then
+						Text.Text = "Getting Mop"
+					end
+					Player.Character.HumanoidRootPart.CFrame = Locations:FindFirstChild("PizzaPlanet", true):FindFirstChild("DeliveryMoped", true):GetModelCFrame() * CFrame.new(0,5,0)
+					Workspace.CurrentCamera.CFrame = CFrame.lookAt(Workspace.CurrentCamera.CFrame.Position + Vector3.new(0,5,0), Locations:FindFirstChild("PizzaPlanet", true):FindFirstChild("DeliveryMoped", true):GetModelCFrame().Position)
+					FireConnection(Player.PlayerGui.MainGUI.InteractIndicator.Activated)
+				end
+				local C = nil
+				if Player.Character:FindFirstChild("Vehicle_Delivery Moped", true) then
+					repeat
+						if Toggy.Status then
+							Text.Text = "Getting Pizza " .. Bruh 
+						end
+						Pathfind(Player.Character:FindFirstChild("Vehicle_Delivery Moped", true), Vector3.new(1161.008544921875, 10.427573204040527, 275.8211364746094))
+						if Mag(Player.Character:GetModelCFrame(), Locations:WaitForChild("PizzaPlanet"):WaitForChild("Conveyor"):WaitForChild("MovingBoxes"):FindFirstChildOfClass("UnionOperation")) < 25 and wait(5) then
+							C = Table:Invoke({Type = "TakePizzaBox", Box = Locations:WaitForChild("PizzaPlanet"):WaitForChild("Conveyor"):WaitForChild("MovingBoxes"):FindFirstChildOfClass("UnionOperation")})
+						end
+						wait(1)
+					until C ~= nil and C:FindFirstChild("HumanoidRootPart", true)
+					repeat wait()
+						if Toggy.Status then
+							Text.Text = "Getting Pizza to Customer"
+						end
+						Pathfind(Player.Character:FindFirstChild("Vehicle_Delivery Moped", true), C.HumanoidRootPart.Position + Vector3.new(0,0,0))
+						if Mag(C.HumanoidRootPart, Player.Character:GetModelCFrame()) < 5 and wait(5) then
+							Table:Fire({Type = "DeliverPizza", Customer = C})
+						end
+					until not Player.Character:FindFirstChild("Pizza Box", true)
+					Bruh = Bruh + 1
+				end
+			else
+				for i=1, Toggy.SecondsToWait do
+					wait(1)
+					if Toggy.Status then
+						Text.Text = "Taking Break " .. i
+					end
+				end
+				Bruh = 0
+			end
+		end)
+	end
+end)
+if Toggy.Toggled then
+	return SendNotification("Credits", "DekuDimz, Stepbrofurious, Introvert1337", "", 10)
 end
