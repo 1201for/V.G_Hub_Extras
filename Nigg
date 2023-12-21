@@ -1,0 +1,323 @@
+local VirtualUser = game:GetService("VirtualUser")
+local G = getgenv and getgenv() or _G or shared
+for i,v in next, game:GetChildren() do
+	G[v.ClassName] = v
+end
+G.Player = Players.LocalPlayer
+Player.Idled:connect(function()
+    VirtualUser:ClickButton2(Vector2.new())
+end)
+
+for i,v in pairs(getconnections(Player.Idled)) do
+    v:Disable()
+end
+local Treds = {}
+for i,v in next, workspace.Worlds.Dojo.Map.Treadmills:GetChildren() do
+	if v:IsA("Model") and not table.find(Treds, v.Name) then
+		table.insert(Treds, v.Name)
+	end
+end
+
+local repo = 'https://raw.githubusercontent.com/wally-rblx/LinoriaLib/main/'
+local Library = loadstring(game:HttpGet("https://raw.githubusercontent.com/1201for/V.G-Hub/main/GUI/PlayerLIB"))()
+local ThemeManager = loadstring(game:HttpGet(repo .. 'addons/ThemeManager.lua'))()
+local SaveManager = loadstring(game:HttpGet(repo .. 'addons/SaveManager.lua'))()
+local Window = Library:CreateWindow({
+    Title = MarketplaceService:GetProductInfo(game.PlaceId).Name,
+    Center = true, 
+    AutoShow = true,
+})
+
+local Tabs = {
+    Main = Window:AddTab('Main'), 
+    Misc = Window:AddTab("Misc"),
+    Events = Window:AddTab("Events"),
+    ['UI Settings'] = Window:AddTab('UI Settings'),
+}
+
+local LeftGroupBox = Tabs.Main:AddLeftGroupbox('')
+local LeftGroupBox2 = Tabs.Main:AddLeftGroupbox("")
+local RightGroupBox = Tabs.Main:AddRightGroupbox('')
+local RightGroupBox2 = Tabs.Main:AddRightGroupbox("")
+
+local LeftBox = Tabs.Misc:AddLeftGroupbox('Groupbox')
+local RightBox = Tabs.Misc:AddRightGroupbox('Groupbox')
+
+local LeftEventGroupBox = Tabs.Events:AddLeftGroupbox('AutoFarms')
+
+local MenuGroup = Tabs['UI Settings']:AddLeftGroupbox('Menu')
+
+LeftGroupBox:AddToggle('Nigg', {Text = 'Auto Treadmills', Default = false,Tooltip = '', Callback = function(A)
+Treid = A
+	spawn(function()
+		while wait() and Treid do
+			pcall(function()
+				game:GetService("ReplicatedStorage"):WaitForChild("Packages"):WaitForChild("_Index"):WaitForChild("sleitnick_knit@1.4.7"):WaitForChild("knit"):WaitForChild("Services"):WaitForChild("TreadmillService"):WaitForChild("RE"):WaitForChild("Join"):FireServer(Tred)
+			end)
+		end
+	end)
+end})
+
+LeftGroupBox:AddDropdown('Niggsers', {Values = Treds, Default = 1, Multi = false, Text = 'Treadmills', Tooltip = '', Callback = function(A)
+    Tred = A
+end})
+
+
+local ESP = loadstring(game:HttpGet("https://raw.githubusercontent.com/1201for/V.G-Hub/main/Karrot-Esp"))()
+RightGroupBox:AddToggle('ESP1', {Text = 'Esp Toggle', Default = false,Tooltip = '', Callback = function(A)
+    ESP:Toggle(A)
+end})
+Toggles.ESP1:OnChanged(function(State)
+    ESP:Toggle(Toggles.ESP1.Value)
+end)
+
+RightGroupBox:AddToggle('ESP2', {Text = 'Esp Players', Default = false,Tooltip = '', Callback = function(A)
+    ESP.Players = A
+end})
+Toggles.ESP2:OnChanged(function(State)
+    ESP.Players = Toggles.ESP2.Value
+end)
+
+RightGroupBox:AddToggle('ESP3', {Text = 'Esp Tracers', Default = false,Tooltip = '', Callback = function(A)
+    ESP.Tracers = A
+end})
+Toggles.ESP3:OnChanged(function(State)
+    ESP.Tracers = Toggles.ESP3.Value
+end)
+
+RightGroupBox:AddToggle('ESP4', {Text = 'Esp Names', Default = false,Tooltip = '', Callback = function(A)
+    ESP.EspNames = A
+end})
+Toggles.ESP4:OnChanged(function(State)
+    ESP.EspNames = Toggles.ESP4.Value
+end)
+
+RightGroupBox:AddToggle('ESP5', {Text = 'Esp Boxes', Default = false,Tooltip = '', Callback = function(A)
+    ESP.Boxes = A
+end})
+Toggles.ESP5:OnChanged(function(State)
+    ESP.Boxes = Toggles.ESP5.Value
+end)
+
+RightGroupBox:AddToggle('SSS', {Text = 'WalkSpeed Toggle',Default = false,Tooltip = '', Callback = function(A)
+WS = A 
+    RunService.Stepped:Connect(function()
+        if WS then
+            pcall(function()
+                Player.Character:FindFirstChildWhichIsA("Humanoid").WalkSpeed = WalkSpeed or 16
+            end)
+        end
+    end)
+end})
+Toggles.SSS:OnChanged(function(State)
+    Foe = Toggles.SSS.Value 
+end)
+RightGroupBox:AddInput('SSF3', {Default = 'WalkSpeed',Numeric = true,Finished = false,Text = 'WalkSpeed',Tooltip = 'Numbers Only',Placeholder = 'WalkSpeed'})
+Options.SSF3:OnChanged(function(State)
+    WalkSpeed = Options.SSF3.Value
+end)
+
+RightGroupBox:AddToggle('EEE', {Text = 'JumpPower Toggle',Default = false,Tooltip = '', Callback = function(A)
+JP = A 
+    RunService.Stepped:Connect(function()
+        if JP then
+            pcall(function()
+                local H = Player.Character:FindFirstChildWhichIsA("Humanoid")
+                if H.UseJumpPower then
+                    H.JumpPower = JumpPower or 50
+                else
+                    H.JumpHeight = JumpPower or 50
+                end
+            end)
+        end
+    end)
+end})
+Toggles.EEE:OnChanged(function(State)
+    JP = Toggles.EEE.Value 
+end)
+RightGroupBox:AddInput('SSF1', {Default = 'JumpPower',Numeric = true,Finished = false,Text = 'JumpPower',Tooltip = 'Numbers Only',Placeholder = 'JumpPower'})
+
+Options.SSF1:OnChanged(function(State)
+    JumpPower = Options.SSF1.Value 
+end)
+
+
+RightGroupBox:AddToggle('vvS', {Text = 'Infinite Jump',Default =  InfiniteJump,Tooltip = '', Callback = function(A)
+InfiniteJump = A
+    UserInputService.JumpRequest:connect(function()
+        if InfiniteJump then
+            Player.Character:FindFirstChildWhichIsA("Humanoid"):ChangeState("Jumping")
+        end
+    end)
+end})
+
+Toggles.vvS:OnChanged(function()
+    InfiniteJump = Toggles.vvS.Value 
+end)
+
+RightGroupBox:AddToggle('eeS', {Text = 'NoClip',Default =  Sex2,Tooltip = '', Callback = function(A)
+noclips = A
+    RunService.Stepped:connect(function(v)
+        if noclips then
+            pcall(function()
+                NoClip2(Player.Character)
+            end)
+        end
+    end)
+end})
+Toggles.eeS:OnChanged(function()
+    noclips = Toggles.eeS.Value 
+end)
+
+RightGroupBox:AddToggle('aaS', {Text = 'H Fly',Default =  Sex,Tooltip = 'Fly By Pressing H', Callback = function(A)
+Sex = A
+local Max = 0
+local LP = Players.LocalPlayer
+local Mouse = LP:GetMouse()
+Mouse.KeyDown:connect(
+    function(k)
+        if k:lower() == "h" and Sex then
+            Max = Max + 1
+            getgenv().Fly = false
+            if Sex then
+                local T = LP.Character:FindFirstChild("UpperTorso",true) or LP.Character:FindFirstChild("HumanoidRootPart",true)
+                local S = {
+                    F = 0,
+                    B = 0,
+                    L = 0,
+                    R = 0
+                }
+                local S2 = {
+                    F = 0,
+                    B = 0,
+                    L = 0,
+                    R = 0
+                }
+                local SPEED = 5
+                local function FLY()
+                    getgenv().Fly = true
+                    local BodyGyro = Instance.new("BodyGyro", T)
+                    local BodyVelocity = Instance.new("BodyVelocity", T)
+                    BodyGyro.P = 9e4
+                    BodyGyro.maxTorque = Vector3.new(9e9, 9e9, 9e9)
+                    BodyGyro.cframe = T.CFrame
+                    BodyVelocity.velocity = Vector3.new(0, 0, 0)
+                    BodyVelocity.maxForce = Vector3.new(9e9, 9e9, 9e9)
+                    spawn(function()
+                        repeat wait()
+                            LP.Character.Humanoid.PlatformStand = true
+                                if S.L + S.R ~= 0 or S.F + S.B ~= 0 then
+                                    SPEED = 500
+                                elseif not (S.L + S.R ~= 0 or S.F + S.B ~= 0) and SPEED ~= 0 then
+                                    SPEED = 0
+                                end
+                                if (S.L + S.R) ~= 0 or (S.F + S.B) ~= 0 then
+                                    BodyVelocity.velocity =
+                                        ((Workspace.CurrentCamera.CoordinateFrame.lookVector * (S.F + S.B)) +
+                                        ((Workspace.CurrentCamera.CoordinateFrame *
+                                            CFrame.new(S.L + S.R, (S.F + S.B) * 0.2, 0).p) -
+                                            Workspace.CurrentCamera.CoordinateFrame.p)) *
+                                        SPEED
+                                    S2 = {
+                                        F = S.F,
+                                        B = S.B,
+                                        L = S.L,
+                                        R = S.R
+                                    }
+                                elseif (S.L + S.R) == 0 and (S.F + S.B) == 0 and SPEED ~= 0 then
+                                    BodyVelocity.velocity =
+                                        ((Workspace.CurrentCamera.CoordinateFrame.lookVector * (S2.F + S2.B)) +
+                                        ((Workspace.CurrentCamera.CoordinateFrame *
+                                            CFrame.new(S2.L + S2.R, (S2.F + S2.B) * 0.2, 0).p) -
+                                            Workspace.CurrentCamera.CoordinateFrame.p)) *
+                                        SPEED
+                                else
+                                    BodyVelocity.velocity = Vector3.new(0, 0.1, 0)
+                                end
+                                BodyGyro.cframe = Workspace.CurrentCamera.CoordinateFrame
+                            until not getgenv().Fly
+                            S = {
+                                F = 0,
+                                B = 0,
+                                L = 0,
+                                R = 0
+                            }
+                            S2 = {
+                                F = 0,
+                                B = 0,
+                                L = 0,
+                                R = 0
+                            }
+                            SPEED = 0
+                            BodyGyro:destroy()
+                            BodyVelocity:destroy()
+                            LP.Character.Humanoid.PlatformStand = false
+                        end
+                    )
+                end
+                Mouse.KeyDown:connect(
+                    function(k)
+                        if k:lower() == "w" then
+                            S.F = 1
+                        elseif k:lower() == "s" then
+                            S.B = -1
+                        elseif k:lower() == "a" then
+                            S.L = -1
+                        elseif k:lower() == "d" then
+                            S.R = 1
+                        end
+                    end
+                )
+                Mouse.KeyUp:connect(
+                    function(k)
+                        if k:lower() == "w" then
+                            S.F = 0
+                        elseif k:lower() == "s" then
+                            S.B = 0
+                        elseif k:lower() == "a" then
+                            S.L = 0
+                        elseif k:lower() == "d" then
+                            S.R = 0
+                        end
+                    end
+                )
+                FLY()
+                if Max == 2 then
+                    getgenv().Fly = false
+                    Max = 0
+                end
+            end
+        end
+    end
+)
+end})
+Toggles.aaS:OnChanged(function()
+    Sex = Toggles.aaS.Value 
+end)
+
+
+RightGroupBox:AddButton('ServerHop', function() ServerHop() end)
+RightGroupBox:AddButton('Rejoin', function() 
+    local Success, ErrorMessage = pcall(function()
+        Rejoin()
+    end)
+    if ErrorMessage and not Success then
+        warn(ErrorMessage)
+    elseif Success and not ErrorMessage then
+        print(Success)
+    end
+end)
+-- I set NoUI so it does not show up in the keybinds menu
+MenuGroup:AddButton('Unload', function() Library:Unload() set_thread_identity(7) end)
+MenuGroup:AddLabel('Menu bind'):AddKeyPicker('MenuKeybind', { Default = "RightControl", NoUI = true, Text = 'Menu keybind' }) 
+
+Library.ToggleKeybind = Options.MenuKeybind 
+ThemeManager:SetLibrary(Library)
+SaveManager:SetLibrary(Library)
+
+SaveManager:IgnoreThemeSettings() 
+SaveManager:SetIgnoreIndexes({ 'MenuKeybind' }) 
+ThemeManager:SetFolder('V.G Hub')
+SaveManager:SetFolder("V.G Hub/" .. game.PlaceId)
+SaveManager:BuildConfigSection(Tabs['UI Settings']) 
+ThemeManager:ApplyToTab(Tabs['UI Settings'])
